@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <script type="text/javascript">
+
+        // Wait for the page to load first
+          window.onload = function() {
+          var a = document.getElementById("home");
+          //Set code to run when the link is clicked
+          // by assigning a function to "onclick"
+          a.onclick = function() {
+		  
+		  ("section").html("home.html");
+            return false;
+          }
+        }
+    </script>
+<style>
+.center {
+    margin: auto;
+    width: 60%;
+	
+    border:3px solid #8AC007;
+    padding: 10px;
+}
+#header {
+    background-color:#D62A42;
+    color:white;
+    padding:10px;
+}
+#name {
+    color:white;
+	text-align: left-top
+	margin-top: -40px
+}
+#nav {
+    line-height:30px;
+    background-color:rgba(0,0,0,.7);
+    height:400px;
+    color:white;
+    width:110px;
+    float:left;
+    padding:10px;	      
+}
+#section {
+    width:350px;
+    float:left;
+    padding:10px;	 	 
+}
+#footer {
+    background-color:black;
+    color:white;
+    clear:both;
+    text-align:right;
+   padding:10px;	 	 
+}
+</style>
+</head>
+<body>
+<div  class="center">
+<div id="header">
+<table style="width:60%">
+  <tr>
+    <td rowspan="2"><img src="http://powerlearningny.com/wp-content/uploads/2014/04/blank_male.png" height="100" width="100"/></td>
+    <td style="font-size: 25px"><div id ="name"><font size="6">Qandeel Rasheed Abbasi</font><br>
+<font size="4">Experienced Web Developer</font><br></div> </td>
+  </tr>
+  
+</table>
+</div>
+
+<div id="nav">
+ <a id="home" href="home.html"><font color=white>HOME</font></a><br>
+<a id="home" href="about.html"><font color=white>ABOUT</font></a><br>
+<a id="home" href="gallery.html"><font color=white>GALLERY</font></a><br>
+<a id="home" href="contact.html"><font color=white>CONTACT ME</font></a>
+</div>
+
+<div id="section">
+<h2>GALLERY</h2>
+<p>Your achievements are the things you did in a job which made a positive impact and contribution to your employer’s business. They demonstrate to a potential employer that you can do the job well. On the other hand, the skills and knowledge you would be expected to have in order to perform your everyday work duties do not count as accomplishments unless you can demonstrate specifically how you used them to benefit your employer.</p>
+<ul>
+  <li>CCNA Qualified</li>
+  <li>Experienced Java developer</li>
+  <li>Android Developer</li>
+</ul>
+
+</div>
+
+<div id="footer">
+Qandeel Rasheed Abbasi<br>
+NUST H-12 Islamabad Pakistan
+<br>Contact# 03356565432
+</div>
+</div>
+
+</body>
+</html>
