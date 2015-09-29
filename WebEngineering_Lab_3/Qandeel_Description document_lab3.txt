@@ -1,0 +1,5 @@
+Github link: https://github.com/qandeelabbassi/Web-Engineering-Tasks/tree/master/WebEngineering_Lab_3
+
+The zip file contains the html file and css file and images are uploaded seperately on lms. I have used key-frame for moving the
+background horizontally and the plane vertically (up and down). The background keeps looping so that the plane should look like
+its flying.
