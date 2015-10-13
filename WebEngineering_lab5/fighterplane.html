@@ -1,0 +1,115 @@
+
+<html>
+<head>
+<link href="Game.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+	var vari=setInterval(function(){
+		             var enemy1 = document.getElementById("enemy1");
+                     var myplane = document.getElementById("plane");
+					 var enemy2 = document.getElementById("enemy2");
+					 var enemy1_box = { top: 0 ,bottom:0, left:0, right:0 };
+					 var enemy2_box = { top: 0 ,bottom:0, left:0, right:0 };
+					 var myplane_box = { top: 0 , bottom:0, left:0, right:0 };
+                     enemy1_box = enemy1.getBoundingClientRect();
+					 enemy2_box = enemy2.getBoundingClientRect();
+					 myplane_box = myplane.getBoundingClientRect();
+					 if (enemy1_box.top > myplane_box.top && enemy1_box.bottom < myplane_box.bottom && enemy1_box.left < myplane_box.right && enemy1_box.left > myplane_box.left){
+					 alert("Game Over");
+					 }
+					 if (enemy2_box.top > myplane_box.top && enemy2_box.bottom < myplane_box.bottom && enemy2_box.left < myplane_box.right && enemy1_box.left > myplane_box.left){
+					 alert("Game Over");
+					 }
+					 
+		},33);	
+			function moveSelection(event) {                    
+                switch (event.keyCode) {
+                    case 37:
+                        var element1 = document.getElementById("container");
+                        var element = document.getElementById("plane");
+				        if(element.style.left>element1.style.left){
+						element.style.left = parseInt(element.style.left) - 10 + 'px';
+				        }
+						
+                    break;
+
+                    case 39:
+					 var element1 = document.getElementById("container");
+					 var box = { right: 0 };
+                     try {
+                     box = element1.getBoundingClientRect();
+                     } 
+                     catch(e) 
+                     {}
+                     var element = document.getElementById("plane");
+					 var elem = { right: 0 };
+					 try {
+                     elem = element.getBoundingClientRect();
+                     } 
+                     catch(e) 
+                     {}
+					 if(box.right>elem.right+10){
+					 element.style.left = parseInt(element.style.left) + 10 + 'px';
+					 }
+					 
+                    break;
+
+                    case 38:		
+					    var element1 = document.getElementById("container");
+                        var element = document.getElementById("plane");
+						
+				        if(element.style.top>element1.style.top){
+						element.style.top = parseInt(element.style.top) - 10 + 'px';
+						}
+                    break;
+
+                    case 40:
+                        var element1 = document.getElementById("container");
+					    var box = { bottom: 0 };
+                        try {
+                        box = element1.getBoundingClientRect();
+                        } 
+                        catch(e) 
+                        {}
+					
+                        var element = document.getElementById("plane");
+	    				var ele = { bottom: 0 };
+                        try {
+                        ele= element.getBoundingClientRect();
+                        } 
+                        catch(e) 
+                        {}
+					    if(ele.bottom<box.bottom){
+						element.style.top = parseInt(element.style.top) + 10 + 'px';
+					    }
+                    break;
+                }
+            };
+
+		function loop(){
+			window.addEventListener("keydown", moveSelection);
+		}	
+		
+	
+  </script>
+</head>
+<body onload="loop()" onkeydown="" onkeyup="">
+	<div id="container" style="left: 0;right: 0; top: 0; bottom: auto">
+	 <div class="cloudscontainer">
+	   <div class="cloud"> </div>
+	   <div class="cloud1"> </div>
+	   <div class="cloud2"> </div>
+	   <div class="cloud3"> </div>
+	 </div>
+    </div>
+	<div id="containerenemy1">
+	  <img  id="enemy1" src="myplane.png" style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index:150 " height="50" width="100"></img>
+	</div>
+		<div id="containerenemy2">
+	  <img  id="enemy2" src="myplane.png" style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index:150 " height="50" width="100"></img>
+	</div>
+	<div id="planeboundary">
+    <img  id="plane" src="imageplane.png" style="position: absolute; left: 15; right: 15; top: 15; bottom: 0; z-index:200 " height="100" width="200"></img>
+	</div>
+    
+</body>
+</html>
