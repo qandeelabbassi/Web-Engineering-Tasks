@@ -3,7 +3,9 @@
 <head>
 <link href="Game.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
+	var collided=false;
 	var vari=setInterval(function(){
+	                 var gameover = document.getElementById("gameover");
 		             var enemy1 = document.getElementById("enemy1");
                      var myplane = document.getElementById("plane");
 					 var enemy2 = document.getElementById("enemy2");
@@ -14,16 +16,21 @@
 					 enemy2_box = enemy2.getBoundingClientRect();
 					 myplane_box = myplane.getBoundingClientRect();
 					 if (enemy1_box.top > myplane_box.top && enemy1_box.bottom < myplane_box.bottom && enemy1_box.left < myplane_box.right && enemy1_box.left > myplane_box.left){
-					 alert("Game Over");
+					 collided=true;
+					 gameover.style.display="block";
 					 }
-					 if (enemy2_box.top > myplane_box.top && enemy2_box.bottom < myplane_box.bottom && enemy2_box.left < myplane_box.right && enemy1_box.left > myplane_box.left){
-					 alert("Game Over");
+					 if (enemy2_box.top > myplane_box.top && enemy2_box.bottom < myplane_box.bottom && enemy2_box.left < myplane_box.right && enemy2_box.left > myplane_box.left){
+					 collided=true;
+					 gameover.style.display="block";
 					 }
 					 
 		},33);	
 			function moveSelection(event) {                    
                 switch (event.keyCode) {
                     case 37:
+					    if(collided){
+						  return;
+						}
                         var element1 = document.getElementById("container");
                         var element = document.getElementById("plane");
 				        if(element.style.left>element1.style.left){
@@ -32,7 +39,10 @@
 						
                     break;
 
-                    case 39:
+                    case 39: 
+					 if(collided){
+						  return;
+					 }
 					 var element1 = document.getElementById("container");
 					 var box = { right: 0 };
                      try {
@@ -53,7 +63,10 @@
 					 
                     break;
 
-                    case 38:		
+                    case 38:
+					     if(collided){
+						  return;
+						}
 					    var element1 = document.getElementById("container");
                         var element = document.getElementById("plane");
 						
@@ -63,6 +76,9 @@
                     break;
 
                     case 40:
+					 if(collided){
+						  return;
+						}
                         var element1 = document.getElementById("container");
 					    var box = { bottom: 0 };
                         try {
@@ -110,6 +126,7 @@
 	<div id="planeboundary">
     <img  id="plane" src="imageplane.png" style="position: absolute; left: 15; right: 15; top: 15; bottom: 0; z-index:200 " height="100" width="200"></img>
 	</div>
+	<div id="gameover" style="display:none"></div>
     
 </body>
 </html>
