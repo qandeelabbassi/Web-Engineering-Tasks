@@ -1,0 +1,107 @@
+<HTML>
+<HEAD>
+<TITLE>Dynamically add Textbox, Radio, Button in html Form using JavaScript</TITLE>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<SCRIPT language="javascript">
+var instance=0;
+function getName() {
+    var person = prompt("Please enter form name", "");
+    
+    if (person != null) {
+        document.getElementById("heading").innerHTML = "" + person + "";
+        document.getElementById("container").style.visibility = "visible";
+    }
+}
+
+function add(type) {
+    var lab ="";
+	lab = prompt("Please enter the label", "");
+    //Create an input type dynamically.
+    var element = document.createElement('div'); 
+    //Assign different attributes to the element.
+	if(type=="button")    
+	element.innerHTML = "<br> <input type='"+type+"' name='element"+instance+"' value='"+lab+"'" +"' id='"+instance+"'>";
+    else
+    element.innerHTML = "<br>"+"<label for='"+instance+"'>"+lab+"</label>"+"   "+"<input type='"+type+"' name='element"+instance+"' value='"+lab+"'" +"' id='"+instance+"'>";
+    var foo = document.getElementById("fooBar");
+    foo.appendChild(element);
+	instance++;
+}
+
+var updateLocalData = function(data){
+	
+	localStorage.setItem('form', JSON.stringify(data))
+
+}
+
+var getLocalData = function(){
+
+	var formData = JSONparse(localStorage.getItem('form'));
+	if (formData !== null){
+
+	return buildForm(formData);
+	}
+
+}
+
+
+$(document).ready(function(){
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] != undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+			
+        } else {
+            o[this.name] = this.value  || '';
+			
+        }
+    });
+    return o;
+};
+
+
+$(function() {
+    $('form').submit(function() {
+        $('#result').text(JSON.stringify($('form').serializeObject()));
+        return false;
+    });
+});
+});
+</SCRIPT>
+</HEAD>
+<BODY onLoad="getName()">
+<div id="container" style="visibility:hidden">
+<FORM form id="myform" name="form" caction="" method="post">
+<H2 id="heading">Dynamically add element in form.</H2>
+Select the element and hit Add to add it in form.
+<BR/>
+<SELECT name="element">
+    <OPTION value="button">Button</OPTION>
+    <OPTION value="text">Textbox</OPTION>
+    <OPTION value="radio">Radio</OPTION>
+    <OPTION value="Password">Password</OPTION>
+    <OPTION value="file">File</OPTION>
+    <OPTION value="number">Number</OPTION>
+	
+    <OPTION value="checkbox">Checkbox</OPTION>
+</SELECT>
+ 
+<INPUT type="button" value="Add" onclick="add(document.forms[0].element.value)"/>
+ 
+<span id="fooBar">&nbsp;</span>
+<br>
+<INPUT type="submit"/>
+<br>
+<h2>JSON</h2>
+<pre id="result">
+</pre>
+</FORM>
+</div>
+</BODY>
+</HTML>
