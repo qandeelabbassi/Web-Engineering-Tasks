@@ -1,0 +1,130 @@
+<HTML>
+<HEAD>
+<TITLE>Dynamically add Textbox, Radio, Button in html Form using JavaScript</TITLE>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<SCRIPT language="javascript">
+var instance=0;
+var reui
+function getName() {
+    var person = prompt("Please enter form name", "");
+    
+    if (person != null) {
+        document.getElementById("heading").innerHTML = "" + person + "";
+        document.getElementById("container").style.visibility = "visible";
+    }
+}
+
+function add(type) {
+    var lab ="";
+	var req ="";
+	var num ="";
+    req = prompt("Is the field required? Enter yes or no", "");
+	if(req == "yes"){
+	   req="required";
+	}
+    //Create an input type dynamically.
+    var element = document.createElement('div'); 
+    //Assign different attributes to the element.
+    if (type=="text" || type=="number" || type=="Password"){   
+	    lab = prompt("Please enter the label", "");
+		var len = prompt("Please enter max length", "0");
+		var st="";
+		if(req=="required")
+		st="*";
+	    element.innerHTML = "<br>" + "<input type='"+type+"' name='"+"element"+instance+"' value='"+""+"' placeholder='"+lab+st+"' id='"+instance+"' maxLength='"+len+"'"+req+">";
+		foo = document.getElementById("fooBar");
+        foo.appendChild(element);
+	}
+	else if(type=="file"){
+	    lab = prompt("Please enter the label", "");
+	    element.innerHTML = "<br>"+"<label for='"+instance+"'>"+lab+"</label>"+"   "+"<input type='"+type+"' name='"+"element"+instance+"' value='"+type+"'" +"' id='"+instance+"'"+req+">";
+		foo = document.getElementById("fooBar");
+        foo.appendChild(element);
+    }
+	else if(type=="radio"){ 
+	    num = prompt("Enter number of radio boxes", "");
+		var num1 = parseInt(num);
+		var i = 1;
+		while(i<=num1){
+		lab = prompt("Please enter the label for element "+i, "");	
+		var element = document.createElement('div'+num1);
+	    element.innerHTML ="<br>"+"<input type='"+type+"' name='"+"element"+instance+"' value='"+lab+"'" +"' checked >" +"   "+lab+"<br>";
+		foo = document.getElementById("fooBar");
+        foo.appendChild(element);
+		i++;
+		}
+	}
+	else if(type=="checkbox"){
+	    lab = prompt("Please enter the label", "");	
+	    element.innerHTML = "<br>"+"<input type='"+type+"' name='"+"element"+instance+"' value='"+lab+"' id='"+instance+"'"+req+">"+"   "+lab;
+		foo = document.getElementById("fooBar");
+        foo.appendChild(element);
+	}
+	else if(type=="button"){
+	    lab = prompt("Please enter the label", "");	
+	    element.innerHTML = "<br>"+"<input type='"+type+"' name='"+"element"+instance+"' value='"+lab+"'" +"' id='"+instance+"'"+req+">";
+		foo = document.getElementById("fooBar");
+        foo.appendChild(element);
+	}
+	
+	instance++;
+}
+$(document).ready(function(){
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] != undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
+
+$(function() {
+    $('form').submit(function() {
+        $('#result').text(JSON.stringify($('form').serializeObject()));
+		$('input:text').html(function(){
+		  alert("text"+this.value);
+		});
+        return false;
+    });
+});
+});
+</SCRIPT>
+</HEAD>
+<BODY onLoad="getName()">
+<div id="container"  style="position:absolute; width:70%; height:70%; border: double 5px; visibility:hidden;">
+<FORM id="myform" style="position:absolute;width:80%; height:80%; left:10%; top:10%;overflow: auto;">
+<H2 id="heading" style="text-align:center">Dynamically add element in form.</H2>
+Select the element and hit Add to add it in form.
+<BR/>
+<SELECT name="element">
+    <OPTION value="button">Button</OPTION>
+    <OPTION value="text">Textbox</OPTION>
+    <OPTION value="radio">Radio</OPTION>
+    <OPTION value="Password">Password</OPTION>
+    <OPTION value="file">File</OPTION>
+    <OPTION value="number">Number</OPTION>
+    <OPTION value="checkbox">Checkbox</OPTION>
+</SELECT>
+ 
+<INPUT type="button" value="Add" onclick="add(document.forms[0].element.value)"/>
+ 
+<span id="fooBar">&nbsp;</span>
+<br>
+<INPUT type="submit"/>
+<br>
+<h2 style="text-align:center">JSON</h2>
+<pre style="background:#cfcfcf; height:10%;" id="result">
+</pre>
+</FORM>
+</div>
+</BODY>
+</HTML>

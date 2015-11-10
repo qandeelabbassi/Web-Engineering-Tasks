@@ -28,23 +28,6 @@ function add(type) {
 	instance++;
 }
 
-var updateLocalData = function(data){
-	
-	localStorage.setItem('form', JSON.stringify(data))
-
-}
-
-var getLocalData = function(){
-
-	var formData = JSONparse(localStorage.getItem('form'));
-	if (formData !== null){
-
-	return buildForm(formData);
-	}
-
-}
-
-
 $(document).ready(function(){
 $.fn.serializeObject = function()
 {
