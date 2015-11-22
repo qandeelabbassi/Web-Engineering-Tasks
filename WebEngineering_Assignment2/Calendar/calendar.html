@@ -1,0 +1,179 @@
+<html>
+
+<head>
+    <title>Calendar</title>
+    <link rel="stylesheet" type="text/css" href="calendar.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pouchdb/5.1.0/pouchdb.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>
+    <script type="text/javascript">
+        var cal = [
+            ["", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", ""]
+        ];
+        var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+		var monthtrack = 0;
+		var yeartrack = 0;
+        function setToday() {
+            var now = new Date();
+            var day = now.getDate();
+            var month = now.getMonth();
+            var year = now.getFullYear();
+            displayCalendar(month, year);
+        }
+
+        function displayCalendar(month, year) {
+		    monthtrack = parseInt(month);
+            month = parseInt(month);
+            year = parseInt(year);
+			yeartrack = year;
+            var i = 0;
+            var w = 0;
+            var count = 0;
+            var days = getDaysInMonth(month + 1, year);
+            var firstOfMonth = new Date(year, month, 1);
+            var startingPos = firstOfMonth.getDay();
+            days += startingPos;
+            for (i = 0; i < startingPos; i++) {
+                if (count != 0 && count % 7 == 0) {
+                    w += 1;
+                    count = 0;
+                }
+                cal[w][count] = " ";
+                count += 1;
+            }
+            for (i = startingPos; i < days; i++) { // days +star
+                if (count != 0 && count % 7 == 0) {
+                    w += 1;
+                    count = 0;
+                }
+                if (i - startingPos + 1 < 10) {
+                    cal[w][count] = "0";
+                    cal[w][count] += i - startingPos + 1;
+                } else {
+                    cal[w][count] = i - startingPos + 1;
+                }
+                count += 1;
+            }
+			for (i=days; i<42; i++)  {
+				if (count != 0 && count % 7 == 0) {
+                    w += 1;
+                    count = 0;
+                }
+				cal[w][count] = "";
+				count += 1;
+			}
+            var scope = angular.element($("#myscope")).scope();
+            scope.$apply(function() {
+                scope.cal = cal;
+			    scope.month1 = monthNames[month];
+                scope.year1 = year;
+            })
+        }
+
+        function setPreviousMonth() {
+                var day = 0;
+				var year = yeartrack;
+                var month = monthtrack;
+                if (month == 0) {
+                    month = 11;
+                    if (year > 1000) {
+                        year--;
+                    }
+                } else {
+                    month--;
+                }
+                displayCalendar(month, year);
+		}
+
+        function setNextMonth() {
+                var year = yeartrack;
+                var day = 0;
+                var month = monthtrack;
+                if (month == 11) {
+                    month = 0;
+                    year++;
+                } else {
+                    month++;
+                }
+                displayCalendar(month, year);
+            }
+
+        function getDaysInMonth(month, year) {
+            var days;
+            if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) days = 31;
+            else if (month == 4 || month == 6 || month == 9 || month == 11) days = 30;
+            else if (month == 2) {
+                if (isLeapYear(year)) {
+                    days = 29;
+                } else {
+                    days = 28;
+                }
+            }
+            return (days);
+        }
+
+        function isLeapYear(Year) {
+            if (((Year % 4) == 0) && ((Year % 100) != 0) || ((Year % 400) == 0)) {
+                return (true);
+            } else {
+                return (false);
+            }
+        }
+
+        var app = angular.module('myapp', []);
+        app.controller('myCtrl', function($scope) {
+            $scope.checkToday = function(date) {
+			    var m = new Date().getMonth();
+				var y = new Date().getFullYear();
+                return date == new Date().getDate() && m == monthtrack && y == yeartrack;
+            }
+            $scope.month = monthNames[new Date().getMonth()];
+            $scope.dayname = days[new Date().getDay()];
+            $scope.year = new Date().getFullYear();
+            $scope.datenum = new Date().getDate();
+			$scope.month1 = monthNames[new Date().getMonth()];
+            $scope.year1 = new Date().getFullYear();
+        });
+    </script>
+
+</head>
+
+<body onLoad="setToday()">
+
+    <div class="container" id="myscope" ng-app="myapp" ng-controller="myCtrl">
+        <div class="CurrentDate">
+            <image src="cal.png" class="CalImage"></image>
+            <div class="date">{{datenum}}</div>
+            <div class="info">
+                {{dayname}} <br> {{month}} / {{year}}
+            </div>
+        </div>
+        <div class="header">
+            <image src="leftw.png" onclick="setPreviousMonth()" class="left"></image>
+            <p id="month-year">{{month1}} / {{year1}}</p>
+            <image src="rightw.png" onclick="setNextMonth()" class="right"></image>
+        </div>
+        <div class="week-names">
+            <span class="day">SUN</span>
+            <span class="day">MON</span>
+            <span class="day">TUE</span>
+            <span class="day">WED</span>
+            <span class="day">THU</span>
+            <span class="day">FRI</span>
+            <span class="day">SAT</span>
+        </div>
+        <div class="week" ng-repeat="week in cal track by $index">
+            <span class="day-no" ng-class="{ today: checkToday(d) }" ng-repeat="d in week track by $index">{{d}}</span>
+        </div>
+    </div>
+
+</body>
+
+</html>

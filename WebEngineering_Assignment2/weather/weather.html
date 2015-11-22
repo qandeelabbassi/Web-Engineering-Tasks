@@ -1,0 +1,60 @@
+<html>
+
+<head>
+    <title>Weather</title>
+	<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+    <link href='weather.css' rel='stylesheet' type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script>
+	var jsonData;
+	var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+	$(document).ready(function(){
+	$.ajax({
+    url: "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22islamabad%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys",
+    dataType: "json",
+    success: function(data) {
+	 var scope = angular.element($("#myscope")).scope();
+            scope.$apply(function() {
+				var i = data.query.created;
+				var dateArr = i.split('T');
+				var dateparts= dateArr[0].split('-');
+                scope.dat = dateparts[2] +"    "+ monthNames[dateparts[1]-1]+"    "+dateparts[0];
+				scope.src = "https://s.yimg.com/zz/combo?a/i/us/nws/weather/gr/"+data.query.results.channel.item.condition.code+"d.png";
+				console.log(data.query.results.channel.item.condition.code);
+				scope.F = data.query.results.channel.item.condition.temp;
+				scope.wind = data.query.results.channel.wind.speed;
+				scope.humid = data.query.results.channel.atmosphere.humidity;
+				scope.text = data.query.results.channel.item.forecast[0].text;
+                scope.city = data.query.results.channel.location.city;
+                scope.region = data.query.results.channel.location.country;
+            });
+    }
+ });
+	});
+	var app = angular.module('myapp', []);
+        app.controller('myCtrl', function($scope) {
+        });
+    </script>
+</head>
+
+<body onLoad="">
+<div class="container" id="myscope" ng-app="myapp" ng-controller="myCtrl">
+	<p id="location">{{city}}, {{region}}</p>
+	<p id="time">{{dat}}</p>
+	<image id="weather_icon"  ng-src="{{src}}"></image>
+	<hr style="margin:20px;">
+	<table  width="70%" style="margin:auto;color:#ffffff"> 
+	<tr>
+    <td rowspan="2" style="font-size:60px">{{F}} &deg F</td>
+    <td  valign="bottom"><image id="icon" src="wind40.png"></image>{{wind}} MPH</td>
+    </tr>
+	<tr>
+	<td valign="top"><image id="icon" src="humid.png"></image>   {{humid}}%</td>
+	</tr>
+	</table>	
+	<p id="currently">{{text}}</p>
+</div>
+
+</body>
+</html>

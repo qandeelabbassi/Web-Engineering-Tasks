@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <title>Clock</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="clock.css">
+
+    <script language="javascript" type="text/javascript">
+		var i=0;
+        function timerTick() {
+            with(new Date()) {
+                var h, m, s;
+                h = 30 * ((getHours() % 12) + getMinutes() / 60);
+                m = 6 * getMinutes();
+                s = 6 * getSeconds();
+				var audio = document.getElementsByTagName("audio")[0];
+				audio.play();
+				if( getHours() == 12 && i==0 ){
+				var audio1 = document.getElementsByTagName("audio")[1];
+				audio1.play();
+				i=1;
+				}
+                document.getElementById('hour').setAttribute('transform', 'rotate(' + h + ', 50, 50)');
+                document.getElementById('minute').setAttribute('transform', 'rotate(' + m + ', 50, 50)');
+                document.getElementById('second').setAttribute('transform', 'rotate(' + s + ', 50, 50)');
+
+                setTimeout(timerTick, 1000);
+            }
+        }
+    </script>
+</head>
+
+<body onload='timerTick()' style="overflow:hidden">
+	<audio>
+	<source src="tick.mp3"></source>
+    </audio>
+	<audio>
+	<source src="dong.mp3"></source>
+	</audio>
+	<div id= "container" style="text-align:center;top:10%;position:relative">
+    <svg id='clock' viewBox='0 0 100 100' width='380' height='380' >
+        <defs>
+            <style type="text/css">
+			  @font-face {
+                    font-family: font;
+                    src: url(font.ttf);
+			  }
+			  svg{
+                    font-family: font, verdanas, sans-serif;
+			  }
+            </style>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:rgb(128,128,128);stop-opacity:1" />
+                <stop offset="100%" style="stop-color:rgb(32,32,32);stop-opacity:1" />
+            </linearGradient>
+            <filter id="dropshadow" height="130%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+                <!-- stdDeviation is how much to blur -->
+                <feOffset dx="1" dy="1" result="offsetblur" />
+                <!-- how much to offset -->
+                <feMerge>
+                    <feMergeNode/>
+                    <!-- this contains the offset blurred image -->
+                    <feMergeNode in="SourceGraphic" />
+                    <!-- this contains the element that the filter is applied to -->
+                </feMerge>
+            </filter>
+        </defs>
+        <circle cx='50' cy='50' r='45' fill="url(#grad1)"  filter="url(#dropshadow)"   stroke-width="3px" ;stroke="#000000" />
+		
+        <text x='45' y='17' style=" font-size: 80%; stroke: #ffffff; fill: #ffffff">1 2</text>
+        <text x='85.5' y='54' style="font-size: 80%; stroke: #ffffff; fill: #ffffff">3</text>
+        <text x='48' y='91' style=" font-size: 80%; stroke: #ffffff; fill: #660000">6</text>
+        <text x='9' y='54' style=" font-size: 80%;stroke: #ffffff; fill: #ffffff">9</text>
+        
+        <g id='pointers'>
+            <line id="hour" stroke-width="5px"; filter="url(#dropshadow)" x1='50' y1='50' x2='50' y2='20' style="stroke-width:3" stroke-linecap="square" />
+            <line id="minute" stroke-width="3px"; filter="url(#dropshadow)" x1='50' y1='50' x2='50' y2='17' style="stroke-width:1.7;" stroke-linecap="square" />
+            <line id="second" stroke-width="1px" filter="url(#dropshadow)" style="stroke:rgb(246,72,72); stroke-width:1;" stroke-linecap="square" x1='50' y1='60' x2='50' y2='13' />
+        </g>
+		
+		<circle cx='50' cy='50' r='2' fill="rgb(246,72,72)" stroke-width="0px"/>
+    </svg>
+	</div>
+</body>
+
+</html>

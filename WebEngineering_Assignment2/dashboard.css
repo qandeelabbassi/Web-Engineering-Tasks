@@ -1,0 +1,109 @@
+body {
+	background: url("wall.jpg");
+	background-size:cover;
+	margin: 0px;
+    overflow: hidden;
+    position: relative;
+}
+
+#container{
+	color:#ffffff;
+	width:100%;
+	height:100%;
+	padding:10px;
+	text-align:center;
+	font-family: 'Poiret One', cursive;
+}
+
+.cards{
+	float:left;
+    margin:10% 30px 30px 30px;
+    perspective: 500;
+    -webkit-perspective: 500;
+    -moz-perspective: 500;
+    -ms-perspective: 500;
+    -o-perspective: 500;
+    width:28.5%;
+	top:0;
+	left:0;
+    height:200px;
+    background-color:#59A3FF;
+    transform-style:preserve-3d;
+    -webkit-transform-style:preserve-3d;
+    -moz-transform-style:preserve-3d;
+    -o-transform-style:preserve-3d;
+    cursor:pointer;
+    /* Animate the transitions */
+    -webkit-transition:0.8s; text-align:center;
+    -moz-transition:0.8s; text-align:center;
+    -ms-transition:0.8s; text-align:center;
+    -o-transition:0.8s; text-align:center;
+    transition:0.8s; text-align:center;
+    
+}
+
+#content1{overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+#content2{overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+#content3{overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.flip1{
+	left:35%;
+    overflow: hidden;
+	background-color: rgba(0, 0, 0, 0);
+    width: 30%;
+    height: 80%;
+    margin: 0px;
+    padding: 0px;
+	z-index:100;
+	position:relative;
+    transform: rotateY(360deg);
+    -webkit-transform: rotateY(360deg);
+    -moz-transform: rotateY(360deg);
+    -o-transform: rotateY(360deg);
+    -ms-transform: rotateY(360deg);
+    
+}
+
+.flip2{
+    overflow: hidden;
+	background-color: rgba(0, 0, 0, 0);
+    width: 30%;
+    height: 80%;
+    margin: 0px;
+    padding: 0px;
+	z-index:100;
+	position:relative;
+    transform: rotateY(360deg);
+    -webkit-transform: rotateY(360deg);
+    -moz-transform: rotateY(360deg);
+    -o-transform: rotateY(360deg);
+    -ms-transform: rotateY(360deg);
+    
+}
+
+.flip3{
+	left:-31%;
+    overflow: hidden;
+	background-color: rgba(0, 0, 0, 0);
+    width: 30%;
+    height: 80%;
+    margin: 0px;
+    padding: 0px;
+	z-index:100;
+	position:relative;
+    transform: rotateY(360deg);
+    -webkit-transform: rotateY(360deg);
+    -moz-transform: rotateY(360deg);
+    -o-transform: rotateY(360deg);
+    -ms-transform: rotateY(360deg);
+    
+}

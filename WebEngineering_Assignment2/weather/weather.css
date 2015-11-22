@@ -1,0 +1,41 @@
+.container{
+	width:90%;
+	height:80%;
+	top:5%;
+	margin:auto;
+	background:#34495e;
+	color:#ffffff;
+	font-family: 'Source Sans Pro', sans-serif;
+	text-align:center;
+	padding:15px;
+	position:relative;
+	box-shadow: 8px 8px 5px rgba(0,0,0,0.5);
+}
+
+#location{
+	font-size:30px;
+	text-align:center;
+	height:10px;
+}
+
+#time{
+	font-size:20px;
+	text-align:center;
+}
+
+#weather_icon{
+	width:auto%;
+	height:28%;
+	max-height:30%;
+}
+
+#icon{
+	height:4%;
+	max-height:100%;
+	width:auto;
+}
+
+#currently{
+	font-size:22px;
+	text-align:center;
+}

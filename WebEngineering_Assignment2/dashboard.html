@@ -1,0 +1,121 @@
+<html>
+
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="dashboard.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
+    <script>
+        var visible = 0;
+        var cont_vis = "";
+
+        var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        function startTime() {
+            var today = new Date();
+            var h = today.getHours();
+            var m = today.getMinutes();
+            var s = today.getSeconds();
+            m = checkTime(m);
+            s = checkTime(s);
+            document.getElementById('time').innerHTML =
+                h + "" + " : " + " " + m + " : " + "" + s;
+            var t = setTimeout(startTime, 500);
+        }
+
+        function checkTime(i) {
+            if (i < 10) {
+                i = "0" + i
+            }; // add zero in front of numbers < 10
+            return i;
+        }
+        $(document).ready(function() {
+            $('html').click(function() {
+                if ($("#" + cont_vis).is(":visible")) {
+                    $("#cards" + visible).toggleClass("flip" + visible);
+                    $("#" + cont_vis).hide();
+                    $("#start" + visible).show();
+                    document.getElementById("content" + visible).innerHTML = '';
+                    cont_vis = ""
+                    visible = 0;
+                } else {
+                    $("#" + cont_vis).show();
+                    $("#start" + visible).hide();
+                }
+            });
+            $("#cards1").click(function() {
+                if (visible == 0) {
+                    $(this).toggleClass("flip1");
+                    document.getElementById("content1").innerHTML = '<object type="text/html" data="calendar/calendar.html" style="width:100%; height: 100%;overflow:hidden"></object>';
+                    cont_vis = "content1";
+                    visible = 1;
+                }
+            });
+            $("#cards2").click(function() {
+                if (visible == 0) {
+                    $(this).toggleClass("flip2");
+                    document.getElementById("content2").innerHTML = '<object type="text/html" data="weather/weather.html" style="width:100%; height: 100%;overflow:hidden"></object>';
+                    cont_vis = "content2";
+                    visible = 2;
+                }
+            });
+            $("#cards3").click(function() {
+                if (visible == 0) {
+                    $(this).toggleClass("flip3");
+                    document.getElementById("content3").innerHTML = '<object type="text/html" data="clock/clock.html" style="width:100%; height: 100%;overflow:hidden"></object>';
+                    cont_vis = "content3";
+                    visible = 3;
+                }
+            });
+
+            $.ajax({
+                url: "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22islamabad%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys",
+                dataType: "json",
+                success: function(data) {
+                    var scope = angular.element($("#container")).scope();
+                    scope.$apply(function() {
+                        scope.weather = data.query.results.channel.item.condition.temp;
+                    });
+                }
+            });
+        });
+
+        var app = angular.module('myapp', []);
+        app.controller('myCtrl', function($scope) {
+            $scope.date = "" + new Date().getDate() + "  " + monthNames[new Date().getMonth()] + "  " + new Date().getFullYear();
+        });
+    </script>
+</head>
+
+<body onload="startTime()">
+    <div id="container" ng-app="myapp" ng-controller="myCtrl">
+        <h1 style="font-size:50px;">Welcome To Dashboard</h1>
+        <div class="cards" id="cards1">
+            <div id="start1">
+                <h1>Calendar</h1>
+                <br>
+                <h2>{{ date }}</h2> </div>
+            <div id="content1" style="display:none">1</div>
+        </div>
+
+        <div class="cards" id="cards2">
+            <div id="start2">
+                <h1>Weather</h1>
+                <br>
+                <h2>{{ weather }} &deg F</h2> </div>
+            <div id="content2" style="display:none"></div>
+        </div>
+
+        <div class="cards" id="cards3">
+            <div id="start3">
+                <h1>Clock</h1>
+                <br>
+                <h2 id="time"></h2>
+            </div>
+            <div id="content3" style="display:none"></div>
+        </div>
+    </div>
+</body>
+
+</html>

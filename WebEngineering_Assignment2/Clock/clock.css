@@ -1,0 +1,26 @@
+ html,
+        body {
+		
+            background-color: rgba(0,0,0,0);
+            font-family: tahoma;
+            font-size: 90%;
+            height: 100%;
+            width: 100%;
+        }
+        #box {
+            background-color: #cc0000;
+            color: #fff;
+            font-weight: bold;
+            text-align: center;
+            padding: 3px 0 3px 0;
+        }
+        #container {
+            height: auto;
+            width: 85%;
+			left:0;
+        }
+        #clock {
+            fill: #235BB5;
+            stroke: #000;
+            stroke-linecap: round;
+        }
