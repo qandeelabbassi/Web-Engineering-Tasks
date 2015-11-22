@@ -15,5 +15,5 @@ The Folder contains a main dashboard.html file and its css plus three folders na
 Walkthrough:
 ------------------------------------------
 Open Dashboard.html in brower (i.e:chrome).The dashboard would show three cards of respective widgets. On clicking any
-card, the respective widget is loaded from its respected folder. If user clicks outside the widget then the widget gets 
+card, the respective widget is loaded from its respective folder. If user clicks outside the widget then the widget gets 
 closed. 
