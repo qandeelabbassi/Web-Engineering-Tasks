@@ -1,14 +1,3 @@
-Github link:
-------------------------------------------
-
-
-Submitted By:
-------------------------------------------
-Name:Qandeel Rasheed Abbasi
-Reg#05883
-Class:BESE-4B
-Assignment#02
-
 Description:
 ------------------------------------------
 Technologies used:
