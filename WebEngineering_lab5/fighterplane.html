@@ -9,17 +9,31 @@
 		             var enemy1 = document.getElementById("enemy1");
                      var myplane = document.getElementById("plane");
 					 var enemy2 = document.getElementById("enemy2");
+					 var enemy3 = document.getElementById("enemy3");
+					 var enemy4 = document.getElementById("enemy4");
 					 var enemy1_box = { top: 0 ,bottom:0, left:0, right:0 };
 					 var enemy2_box = { top: 0 ,bottom:0, left:0, right:0 };
+					 var enemy3_box = { top: 0 ,bottom:0, left:0, right:0 };
+					 var enemy4_box = { top: 0 ,bottom:0, left:0, right:0 };
 					 var myplane_box = { top: 0 , bottom:0, left:0, right:0 };
                      enemy1_box = enemy1.getBoundingClientRect();
 					 enemy2_box = enemy2.getBoundingClientRect();
+					 enemy3_box = enemy3.getBoundingClientRect();
+					 enemy4_box = enemy3.getBoundingClientRect();
 					 myplane_box = myplane.getBoundingClientRect();
 					 if (enemy1_box.top > myplane_box.top && enemy1_box.bottom < myplane_box.bottom && enemy1_box.left < myplane_box.right && enemy1_box.left > myplane_box.left){
 					 collided=true;
 					 gameover.style.display="block";
 					 }
 					 if (enemy2_box.top > myplane_box.top && enemy2_box.bottom < myplane_box.bottom && enemy2_box.left < myplane_box.right && enemy2_box.left > myplane_box.left){
+					 collided=true;
+					 gameover.style.display="block";
+					 }
+					 if (enemy3_box.top > myplane_box.top && enemy3_box.bottom < myplane_box.bottom && enemy3_box.left < myplane_box.right && enemy3_box.left > myplane_box.left){
+					 collided=true;
+					 gameover.style.display="block";
+					 }
+					 if (enemy4_box.top > myplane_box.top && enemy4_box.bottom < myplane_box.bottom && enemy4_box.left < myplane_box.right && enemy4_box.left > myplane_box.left){
 					 collided=true;
 					 gameover.style.display="block";
 					 }
@@ -120,8 +134,14 @@
 	<div id="containerenemy1">
 	  <img  id="enemy1" src="myplane.png" style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index:150 " height="50" width="100"></img>
 	</div>
-		<div id="containerenemy2">
+	<div id="containerenemy2">
 	  <img  id="enemy2" src="myplane.png" style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index:150 " height="50" width="100"></img>
+	</div>
+	<div id="containerenemy3">
+	  <img  id="enemy3" src="myplane.png" style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index:150 " height="50" width="100"></img>
+	</div>
+	<div id="containerenemy4">
+	  <img  id="enemy4" src="myplane.png" style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index:150 " height="50" width="100"></img>
 	</div>
 	<div id="planeboundary">
     <img  id="plane" src="imageplane.png" style="position: absolute; left: 15; right: 15; top: 15; bottom: 0; z-index:200 " height="100" width="200"></img>

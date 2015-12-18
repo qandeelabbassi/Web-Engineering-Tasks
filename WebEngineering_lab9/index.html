@@ -1,0 +1,198 @@
+<html>
+<head>
+	<title>Calendar</title>
+
+<style>
+table, th , td  {
+  border-collapse: collapse;
+  padding: 15px;
+  border: 1px dotted light-blue;
+}
+table tr{
+  background-color: #ddd;
+}
+
+div.container {
+	margin: auto;
+	margin-left: 30%;
+	/*float: right;*/
+}
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pouchdb/5.1.0/pouchdb.min.js"></script>
+
+</head>
+<body>
+
+
+<script type="text/javascript">
+
+var day;
+    day = new Date();
+
+    var monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    // only week days names are present, add weeks programmatically
+    var cal = [['Mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sat', 'Sun'], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]];
+
+    
+    var coords = [1, 1];
+
+
+    var thisMonthDay = day.getDate();
+    var weekDay = day.getDay();
+    var rem = thisMonthDay - weekDay;
+    var extra = rem % 7;
+
+    // first week's initial days from previous cal
+    var prevMonDays = monthDays[ day.getMonth() - 1 ];
+    var prevMonRemDays = 7 - extra;
+
+    for (var x = prevMonRemDays; x > 0 ; x-- ) {
+    	cal[1][x-1] = prevMonDays;
+    	prevMonDays--;
+    }
+
+    // now add current months days
+    for (var x = 0; x < monthDays[ day.getMonth() ]; x++ ) {
+    	// week 0 contains day names
+    	// week 1's start dates contain some of the dates from previous cal
+    	monWeek = parseInt( (x+prevMonRemDays) / 7 ) + 1;
+
+    	var weekDayNum = (x + prevMonRemDays) % 7;
+    	cal[monWeek][weekDayNum] = x+1;
+
+    	if (x+1 == day.getDate()) 
+    		coords = [monWeek, weekDayNum];
+
+    }
+
+    var j = 1;
+    for (var x = 4; x < 7; x++) {
+    	if (cal[5][x] == 0 ) {
+    		cal[5][x] = j;
+    		j++;
+    	}
+    }
+	var j = 4;
+    for (var x = 0; x < 7; x++) {
+    	if (cal[6][x] == 0 ) {
+    		cal[6][x] = j;
+    		j++;
+    	}
+    }
+
+var app = angular.module('myapp', []);
+app.controller('mycontroller', function($scope, $http) {
+	setupAll();
+	$scope.cal = cal;
+	$scope.currMonth = monthNames[new Date().getMonth()];
+});
+
+function dateFormatted() {
+	return day.getDate() + " " + monthNames[day.getMonth()] + " " + day.getFullYear();
+}
+
+var jsonData;
+
+
+function displayWeather(todayWeath) {
+
+	$( "tr:eq("+coords[0]+") td:eq("+coords[1]+")").text(todayWeath);
+}
+
+function retrieveJson() 
+{
+	jsonData = $.ajax({
+		url: "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22islamabad%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys",
+		dataType: "json",
+		success: function(data) 
+			{
+				var f = jsonData.responseJSON.query.results.channel.item.forecast;
+
+				dbAdd(f);
+
+				for (var x = 0; x < f.length; x++) {
+					if (f[x].date == dateFormatted()) {
+
+						var todayWeather = formatToday(f[x].high, f[x].low, f[x].text);
+						cal[coords[0]][coords[1]] = todayWeather;
+
+						displayWeather(todayWeather);
+						break;
+					}
+				}
+			}
+	});
+}
+
+function formatToday(high, low, text) {
+
+	var high = parseInt(high);
+	var low = parseInt(low);
+	var avg = parseInt((high+low)/2);
+
+	var todayWeath = avg + " F "+ text;
+	return todayWeath;
+}
+
+function dbAdd(forecasts) {
+	var db = new PouchDB('calendar');
+	var f;
+
+	for (var x = 0; x < forecasts.length; x++) {
+		// create new JS object
+		f = {
+			_id: new Date().toISOString(),
+			high: forecasts[x].high,
+			low: forecasts[x].low,
+			date: forecasts[x].date,
+			text: forecasts[x].text
+		};
+		// putting the object in database
+		db.put(f, null);
+	}
+}
+
+function dbGet() {
+	var db = new PouchDB("calendar");
+	var todayWeather = null;
+
+	db.allDocs({include_docs: true, descending: true}, function(err, doc) {
+    	for (var x = 0; x < doc.rows.length; x++) {
+    		if (doc.rows[x].doc.date == dateFormatted()) {
+    			results = doc.rows[x].doc;
+    			todayWeather = formatToday(results.high, results.low, results.text);
+    			// alert(todayWeather);
+    			cal[coords[0]][coords[1]] = todayWeather;
+    			break;
+    		}
+    	}
+  	});
+
+  	return todayWeather;
+}
+
+function setupAll() {
+	var todayWeather = dbGet();
+	if (todayWeather)
+		displayWeather(todayWeather);
+	else // no previous data
+		retrieveJson();
+}
+
+</script>
+
+<div class="container" ng-app="myapp" ng-controller="mycontroller"> 
+	<h1>{{ currMonth }}</h1>
+	<table>
+	  <tr ng-repeat="w in cal track by $index">
+	    <td ng-repeat="day in w track by $index">{{ day }}</td>
+	  </tr>
+	</table>
+</div>
+
+</body>
+</html>

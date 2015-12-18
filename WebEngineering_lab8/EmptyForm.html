@@ -1,23 +1,36 @@
 <HTML>
 <HEAD>
 <TITLE>Dynamically add Textbox, Radio, Button in html Form using JavaScript</TITLE>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<link rel="stylesheet" href="EmptyForm.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="bootstrap.min.js"></script>
+<script src="bootbox.min.js"></script>
 <SCRIPT language="javascript">
 var instance=0;
-var reui
-function getName() {
-    var person = prompt("Please enter form name", "");
-    
-    if (person != null) {
-        document.getElementById("heading").innerHTML = "" + person + "";
+var fname=""
+function getName() {	
+	var formname = null;
+	bootbox.prompt("Please enter form name", function(result) {                
+	if (result === null) {                                             
+    Example.show("Prompt dismissed");                              
+	} else {
+    formname = result;  
+	if (formname != null) {
+        document.getElementById("leg").innerHTML = "" + formname + "";
+        document.getElementById("myform").name = "" + formname + "";
+		fname= formname;
         document.getElementById("container").style.visibility = "visible";
     }
+	}
+	});
 }
 
 function add(type) {
     var lab ="";
 	var req ="";
 	var num ="";
+	var clas= "stored"
     req = prompt("Is the field required? Enter yes or no", "");
 	if(req == "yes"){
 	   req="required";
@@ -25,19 +38,33 @@ function add(type) {
     //Create an input type dynamically.
     var element = document.createElement('div'); 
     //Assign different attributes to the element.
-    if (type=="text" || type=="number" || type=="Password"){   
+    if (type=="text" || type=="Password"){   
 	    lab = prompt("Please enter the label", "");
 		var len = prompt("Please enter max length", "0");
 		var st="";
 		if(req=="required")
 		st="*";
-	    element.innerHTML = "<br>" + "<input type='"+type+"' name='"+"element"+instance+"' value='"+""+"' placeholder='"+lab+st+"' id='"+instance+"' maxLength='"+len+"'"+req+">";
+	    element.innerHTML = "<br>" + "<input class='"+clas+"' type='"+type+"' name='"+lab+"' value='"+""+"' placeholder='"+lab+st+"' id='"+instance+"' maxLength='"+len+"'"+req+">";
+		foo = document.getElementById("fooBar");
+        foo.appendChild(element);
+	}
+	else if(type=="number"){
+		lab = prompt("Please enter the label", "");
+		var max = prompt("Please enter min value:");
+		var min = prompt("Please enter max value:");
+		var st="";
+		if(req=="required")
+		st="*";
+	    element.innerHTML = "<br>" + "<input type='"+type+"' name='"+lab+"' placeholder='"+lab+st+"' id='"+instance+"' min='"+min+"'  max='"+max+"'"+req+">";
 		foo = document.getElementById("fooBar");
         foo.appendChild(element);
 	}
 	else if(type=="file"){
+		var st="";
+		if(req=="required")
+		st="*";
 	    lab = prompt("Please enter the label", "");
-	    element.innerHTML = "<br>"+"<label for='"+instance+"'>"+lab+"</label>"+"   "+"<input type='"+type+"' name='"+"element"+instance+"' value='"+type+"'" +"' id='"+instance+"'"+req+">";
+	    element.innerHTML = "<br>"+"<label for='"+instance+"'>"+lab+st+"</label>"+"   "+"<input type='"+type+"' name='"+lab+"' value='"+type+"'" +"' id='"+instance+"'"+req+">";
 		foo = document.getElementById("fooBar");
         foo.appendChild(element);
     }
@@ -56,74 +83,119 @@ function add(type) {
 	}
 	else if(type=="checkbox"){
 	    lab = prompt("Please enter the label", "");	
-	    element.innerHTML = "<br>"+"<input type='"+type+"' name='"+"element"+instance+"' value='"+lab+"' id='"+instance+"'"+req+">"+"   "+lab;
+	    element.innerHTML = "<br>"+"<input type='"+type+"' name='"+lab+"' value='"+lab+"' id='"+instance+"'"+req+">"+"   "+lab;
 		foo = document.getElementById("fooBar");
         foo.appendChild(element);
 	}
 	else if(type=="button"){
 	    lab = prompt("Please enter the label", "");	
-	    element.innerHTML = "<br>"+"<input type='"+type+"' name='"+"element"+instance+"' value='"+lab+"'" +"' id='"+instance+"'"+req+">";
+	    element.innerHTML = "<br>"+"<input type='"+type+"' name='"+lab+"' value='"+lab+"'" +"' id='"+instance+"'>";
 		foo = document.getElementById("fooBar");
         foo.appendChild(element);
 	}
-	
+	else if(type=="Textarea"){
+			lab = prompt("Please enter the label", "");	
+			var len = prompt("Please enter max length", "0");
+		    var st="";
+		    if(req=="required")
+		    st="*";
+			element.innerHTML = "<br>" + "<textarea name='"+lab+"' placeholder='"+lab+st+"' id='"+instance+"' maxLength='"+len+"'"+req+">";
+			foo = document.getElementById("fooBar");
+			foo.appendChild(element);
+	}
+	else if(type=="select"){
+			lab = prompt("Please enter the label", "");
+			var no = prompt("Please enter number of option to insert:", "");
+			var this_select_content = "<select name='"+lab+"' id='"+instance+"' >";
+            for(var i=0; i < no; i++){
+			var name = prompt("Please enter name of option "+(i+1), "");
+            this_select_content += '<option value="' + name + '">' + name + '</option>';
+			}
+			this_select_content +='</select>'
+			element.innerHTML = "<br>" + lab + "  " +this_select_content;
+		    foo = document.getElementById("fooBar");
+            foo.appendChild(element);	
+	}
+	else if(type=="submit"){
+			var op1 = "Submit";
+			var cla = "myButton1";
+			element.innerHTML = "<br>" + "<input class='"+cla+"' type='"+type+"'/>";
+		    foo = document.getElementById("fooBar");
+            foo.appendChild(element);
+    }
+		
+	ProduceJSON();
 	instance++;
 }
-$(document).ready(function(){
-$.fn.serializeObject = function()
-{
-    var o = {};
-    var a = this.serializeArray();
-    $.each(a, function() {
-        if (o[this.name] != undefined) {
-            if (!o[this.name].push) {
-                o[this.name] = [o[this.name]];
-            }
-            o[this.name].push(this.value || '');
-        } else {
-            o[this.name] = this.value || '';
-        }
-    });
-    return o;
-};
 
+
+$(document).ready(function(){
 $(function() {
     $('form').submit(function() {
-        $('#result').text(JSON.stringify($('form').serializeObject()));
-		$('input:text').html(function(){
-		  alert("text"+this.value);
-		});
+	    ProduceJSON();
         return false;
     });
 });
 });
+	
+	function ProduceJSON() {
+	var length = document.getElementById("myform").elements.length;
+    var json = '{"form":[';
+	for(var i = 3; i < length; i++){
+		var field = document.getElementById("myform").elements[i];
+		if(i == length-1){
+			json += '{"Name":"' + field.name + '","Type":"' + field.type + '","Required":"' + field.required + '","MaxLength":"' + field.maxLength + '","Value":"' + field.value + '"}';
+		}
+		else{
+			json += '{"Name":"' + field.name + '","Type":"' + field.type + '","Required":"' + field.required + '","MaxLength":"' + field.maxLength + '","Value":"' + field.value + '"},';
+		}
+		
+	}
+	json += ']}';
+	$('#result').text(json);
+	UpdateLocalData(json);
+}
+
+var UpdateLocalData = function(data){
+		localStorage.setItem(fname, data);
+}
 </SCRIPT>
+
 </HEAD>
 <BODY onLoad="getName()">
-<div id="container"  style="position:absolute; width:70%; height:70%; border: double 5px; visibility:hidden;">
-<FORM id="myform" style="position:absolute;width:80%; height:80%; left:10%; top:10%;overflow: auto;">
-<H2 id="heading" style="text-align:center">Dynamically add element in form.</H2>
-Select the element and hit Add to add it in form.
-<BR/>
-<SELECT name="element">
-    <OPTION value="button">Button</OPTION>
+<div id="container"  style="background:#ffffff; box-shadow: 5px 5px 5px #888888;
+    margin: auto;
+    width: 70%;
+    height: 90%;
+    margin-top: 2%;
+    padding: 20px;
+    border: 1px solid;
+	border-radius:5px;
+    visibility: hidden;">
+<FORM id="myform" style="width:100%; height:100%;overflow: auto;">
+<fieldset>
+    <legend id="leg"></legend>
+<H6 style="font-size=5px;s">Select the element and hit Add to add it in form.</H6>
+<SELECT name="element" style="height:5%">
     <OPTION value="text">Textbox</OPTION>
-    <OPTION value="radio">Radio</OPTION>
     <OPTION value="Password">Password</OPTION>
+    <OPTION value="radio">Radio</OPTION>
     <OPTION value="file">File</OPTION>
     <OPTION value="number">Number</OPTION>
+    <OPTION value="select">Select</OPTION>
+    <OPTION value="Textarea">Textarea</OPTION>
     <OPTION value="checkbox">Checkbox</OPTION>
+    <OPTION value="button">Button</OPTION>
+    <OPTION value="submit">Submit</OPTION>
 </SELECT>
  
-<INPUT type="button" value="Add" onclick="add(document.forms[0].element.value)"/>
+<INPUT type="button"  class="myButton" value="Add" onclick="add(document.forms[0].element.value)"/>
  
 <span id="fooBar">&nbsp;</span>
-<br>
-<INPUT type="submit"/>
-<br>
-<h2 style="text-align:center">JSON</h2>
-<pre style="background:#cfcfcf; height:10%;" id="result">
+<h4 style="margin-top:20px;margin-bottom:3px">JSON</h4>
+<pre style="background:#99cfcfcf;width:100%;border:0px; height:25%;" id="result">
 </pre>
+</fieldset>
 </FORM>
 </div>
 </BODY>
